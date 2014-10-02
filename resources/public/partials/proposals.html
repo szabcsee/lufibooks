@@ -1,0 +1,47 @@
+<div class="container">
+			<div class="row">
+				<div class="page-header">
+				  <h2>Propose some new books for the library!</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="panel panel-default proposals-panel">
+  						<div class="panel-heading heading-proposals">Proposals</div>
+					    <div class="panel-body">
+							<div ng-repeat="proposal in proposals | orderBy: 'created-at'" class="list-group lsy-group">
+							  <li class="list-group-item">
+							  	<a href="#" class="lsy-btn">Vote me up!</a>
+							  	<div class="media">
+								  <a class="pull-left" href="#">
+								    <img class="media-object" src="http://ecx.images-amazon.com/images/I/91dwVV3kLPL._SL1500_.jpg" alt="..." width="60">
+								  </a>
+								  <h4 class="media-heading">Ember book</h4>
+								  <span class="label label-primary">voted by 6 people</span>
+								  <div class="media-body">
+								    Ember.js is a framework for building ambitious web applications. In more specific terms, it is a collection of libraries, abstractions and conventions for dealing with the common challenges of building web applications.
+
+								  </div>
+								</div>
+							  </li>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="panel panel-default">
+  						<div class="panel-heading heading-proposals">New proposal</div>
+					    <div class="panel-body">
+					    		<img src="images/open_book_on_tabl_450.jpg" alt="">
+					    		<p>If you would like to propose any book for the library. You just need to enter the ISBN number of the book and click on the Propose it! button and we will get the details of the book for you.</p>
+					    	    <div class="input-group">
+							      <span class="input-group-btn">
+							        <button class="btn btn-default lsy-propose-button" type="button">Propose it!</button>
+							      </span>
+							      <input type="text" class="form-control" placeholder="ISBN number">
+							    </div><!-- /input-group -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
