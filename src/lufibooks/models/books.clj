@@ -45,5 +45,8 @@
           (merge old-entry
                  (select-keys json-as-map client-can-edit))))
 
-(defn get-all [params] (apply find-by-kind
-                              (cons :books (utils/query-params-to-filter params))))
+
+(defn get-all [params] (vals (desc/merge-result
+                        (apply find-by-kind
+                              (cons :books (utils/query-params-to-filter params)))
+                         (desc/get-all))))
