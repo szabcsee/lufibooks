@@ -8,6 +8,7 @@
             ;                 [credentials :as creds])
             [lufibooks.routes.books :refer [books-routes]]
             [lufibooks.models.proposals :as proposals-model]
+            [lufibooks.models.books :as books-model]
             [lufibooks.routes.proposals :refer [proposals-routes]]
             [lufibooks.routes.vote-ups :refer [vote-ups-routes]]
             [compojure.handler :as handler]
@@ -22,6 +23,8 @@
     (set-ds! (new-datastore :implementation :memory))
     (doseq [isbn ["1934356867" "0321721330" "0321944275" "1934356867" "1937785645" "1449366171"]]
        (proposals-model/persist {:isbn isbn}))
+    (doseq [isbn ["0321721330" "1449366171"]]
+      (books-model/persist {:isbn isbn :allInStock 2}))
     (println "lufibooks is starting")))
 
 (defn destroy []

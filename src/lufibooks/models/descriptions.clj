@@ -6,7 +6,6 @@
 
 (defentity :descriptions
   ; from client
-  [isbn]
   [shortDesc]
   [title]
   [author]
@@ -32,7 +31,9 @@
 
 
 (defn merge-result [parent-entries descriptions-list]
+  (let [parent-map (reduce #(into %1 {(:descKey %2) %2}) {} parent-entries)
+        child-map (reduce #(into %1 {(:key %2) %2}) {} descriptions-list)]
   (merge-with (fn [a b] (assoc a :description b))
-              (reduce #(into %1 {(:descKey %2) %2}) {} parent-entries)
-              (reduce #(into %1 {(:key %2) %2}) {} descriptions-list)))
+              parent-map
+              (select-keys child-map (keys parent-map) ))))
 

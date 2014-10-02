@@ -1,8 +1,11 @@
 (ns lufibooks.models.books
   (:require
-    [lufibooks.models.utils :as utils])
+    [lufibooks.models.utils :as utils]
+    [lufibooks.models.proposals :as proposals]
+    [lufibooks.models.descriptions :as desc])
   (:use [hyperion.api]
-        [hyperion.types]))
+        [hyperion.types]
+        ))
 
 (defentity :books
   ; from client
@@ -16,7 +19,7 @@
   [created-at]
   [updated-at])
 
-(def client-can-edit [:isbn])
+(def client-can-edit [:allInStock])
 
 
 (def get-by-key
@@ -28,8 +31,14 @@
      old-entry))
 
 (defn persist [json-as-map]
-    (save (books)
-          (select-keys json-as-map client-can-edit)))
+  (let [isbn (:isbn json-as-map)
+        proposal (proposals/get-by-isbn isbn)
+        new-entry
+    (assoc (save (books)
+          (merge (select-keys json-as-map client-can-edit) (select-keys proposal [:descKey])))
+      :description (desc/get-by-key (:descKey proposal)))]
+    (proposals/del-entry proposal)
+    new-entry))
 
 (defn update [old-entry json-as-map]
     (save (books)
@@ -38,4 +47,3 @@
 
 (defn get-all [params] (apply find-by-kind
                               (cons :books (utils/query-params-to-filter params))))
-

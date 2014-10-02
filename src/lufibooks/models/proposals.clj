@@ -11,6 +11,7 @@
   ; from client
   [vote :type java.lang.Integer :default 0]
   ; calculated
+  [isbn]
   [descKey :type (foreign-key :descriptions)]
   ; auto
   [created-at]
@@ -45,8 +46,8 @@
   (let [isbn (:isbn json-as-map)
         resp (get-book-data-by-isbn isbn)
         desc (to-desc (-> resp :items first))
-        saved-desc (desc/persist (assoc desc :isbn isbn))]
-    (assoc (save (proposals) {:descKey (:key saved-desc)}) :description saved-desc)))
+        saved-desc (desc/persist desc)]
+    (assoc (save (proposals) {:descKey (:key saved-desc) :isbn isbn}) :description saved-desc)))
 
 
 (defn update [old-entry json-as-map]
@@ -60,7 +61,7 @@
                          (desc/get-all))))
 
 
-
+(defn get-by-isbn [isbn] (first (find-by-kind :proposals :filters [:= :isbn isbn])))
 
 
 
