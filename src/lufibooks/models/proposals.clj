@@ -9,15 +9,14 @@
 
 (defentity :proposals
   ; from client
-  [desc-key :type (foreign-key :descriptions)]
   [vote :type java.lang.Integer :default 0]
   ; calculated
-
+  [desc-key :type (foreign-key :descriptions)]
   ; auto
   [created-at]
   [updated-at])
 
-(def client-can-edit [:isbn])
+(def client-can-edit [:vote])
 
 (defn- to-desc [response]
    {:short-desc (:review-content response)

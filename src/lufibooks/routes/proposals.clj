@@ -37,8 +37,8 @@
   (context "/proposals"
            request
            (routes
-            (DELETE "/:entry-key" [entry-key] (del-entry entry-key))
+            ;(DELETE "/:entry-key" [entry-key] (del-entry entry-key))
             (GET "/" {params :params} (get-all params))
             (POST "/" {request-body :body} (post request-body))
-            (PUT "/:entry-key" {params :params request-body :body} (put (params :entry-key) request-body))
+            ;(PUT "/:entry-key" {params :params request-body :body} (put (params :entry-key) request-body))
             (GET "/:entry-key" [entry-key] (get-entry entry-key)))))
