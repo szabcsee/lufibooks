@@ -6,10 +6,10 @@
 
 (defentity :books
   ; from client
-  [num-borrowed :type java.lang.Integer :default 0]
-  [num-avail :type java.lang.Integer :default 0]
-  [all-in-stock :type java.lang.Integer :default 0]
-  [desc-key :type (foreign-key :descriptions)]
+  [numBorrowed :type java.lang.Integer :default 0]
+  [numAvail :type java.lang.Integer :default 0]
+  [allInStock :type java.lang.Integer :default 0]
+  [descKey :type (foreign-key :descriptions)]
   ; calculated
 
   ; auto

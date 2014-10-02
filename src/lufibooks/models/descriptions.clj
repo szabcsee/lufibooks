@@ -7,13 +7,12 @@
 (defentity :descriptions
   ; from client
   [isbn]
-  [short-desc]
+  [shortDesc]
   [title]
   [author]
-  [image-width :type java.lang.Integer]
-  [image-height :type java.lang.Integer]
-  [image-url]
-
+  [imageWidth :type java.lang.Integer]
+  [imageHeight :type java.lang.Integer]
+  [imageUrl]
 
   ; calculated
 
@@ -29,5 +28,11 @@
 (defn persist [data]
     (save (descriptions) data))
 
-
 (defn get-all [] (find-by-kind :descriptions))
+
+
+(defn merge-result [parent-entries descriptions-list]
+  (merge-with (fn [a b] (assoc a :description b))
+              (reduce #(into %1 {(:descKey %2) %2}) {} parent-entries)
+              (reduce #(into %1 {(:key %2) %2}) {} descriptions-list)))
+

@@ -11,27 +11,30 @@
   ; from client
   [vote :type java.lang.Integer :default 0]
   ; calculated
-  [desc-key :type (foreign-key :descriptions)]
+  [descKey :type (foreign-key :descriptions)]
   ; auto
   [created-at]
   [updated-at])
 
 (def client-can-edit [:vote])
 
+(defn concat-if-needed [c]
+  (if (coll? c) (clojure.string/join ", " c) c))
+
 (defn- to-desc [response]
    {:short-desc (:review-content response)
     :title (-> response :item-atributes :title)
-    :author (-> response :item-atributes :author)
+    :author (concat-if-needed (-> response :item-atributes :author))
     :manufacturer (-> response :item-atributes :manufacturer)
-    :image-width (-> response :large-image :width)
-    :image-height (-> response :large-image :height)
-    :image-url (-> response :large-image :url)
+    :imageWidth (-> response :large-image :width)
+    :imageHeight (-> response :large-image :height)
+    :imageUrl (-> response :large-image :url)
     })
 
 
 (defn get-by-key [entry-key]
   (let [entry (utils/get-by-key :proposals entry-key)]
-    (assoc entry :description (desc/get-by-key (:desc-key entry)))))
+    (assoc entry :description (desc/get-by-key (:descKey entry)))))
 
 (defn del-entry [old-entry]
    (let [entry-key (:key old-entry)]
@@ -43,7 +46,7 @@
         resp (get-book-data-by-isbn isbn)
         desc (to-desc (-> resp :items first))
         saved-desc (desc/persist (assoc desc :isbn isbn))]
-    (assoc (save (proposals) {:desc-key (:key saved-desc)}) :description saved-desc)))
+    (assoc (save (proposals) {:descKey (:key saved-desc)}) :description saved-desc)))
 
 
 (defn update [old-entry json-as-map]
@@ -51,14 +54,7 @@
           (merge old-entry
                  (select-keys json-as-map client-can-edit))))
 
-
-(defn- merge-result [proposals-list descriptions-list]
-  (merge-with (fn [a b] (assoc a :description b))
-              (reduce #(into %1 {(:desc-key %2) %2}) {} proposals-list)
-              (reduce #(into %1 {(:key %2) %2}) {} descriptions-list)))
-
-
-(defn get-all [params] (vals (merge-result
+(defn get-all [params] (vals (desc/merge-result
                         (apply find-by-kind
                               (cons :proposals (utils/query-params-to-filter params)))
                          (desc/get-all))))
