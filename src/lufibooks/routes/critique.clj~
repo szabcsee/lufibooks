@@ -1,0 +1,49 @@
+(ns vonalasfuzet.routes.critique
+  (:require [compojure.core :refer :all]
+            [vonalasfuzet.routes.utils :refer :all]
+            [clojure.data.json :as json]
+            [cemerick.friend :as friend]
+            [vonalasfuzet.models.artwork :as artwork-model]
+            [vonalasfuzet.models.critique :as model])
+  (:use [ring.middleware.json :only [wrap-json-response wrap-json-body]]
+     [ring.util.response :only [response]]))
+
+(defn- get-all [params]
+  (response {:critique (map #(dissoc % :kind) (model/get-all params))}))
+
+(defn- del-entry [entry-key]
+  (let [old-entry (model/get-by-key entry-key)]
+    (if (is-owned old-entry)
+      (response  {:critique (dissoc (model/del-by-key entry-key) :kind)})
+      not-auth-response )))
+
+(defn- get-entry [entry-key]
+  (let [foundEntry (model/get-by-key entry-key)]
+    (response  {:critique (dissoc foundEntry :kind)})))
+
+(defn- post [request-body]
+  (let [json-as-map (json/read-str (slurp request-body) :key-fn clojure.core/keyword)
+       artwork (artwork-model/get-by-key (-> json-as-map :critique :artwork-key))]
+    (response  {:critique (dissoc (model/persist (assoc (:critique json-as-map )
+                                                       :revision (artwork :revision))
+                                                (:username (friend/current-authentication))) :kind)})))
+
+(defn- put [entry-key request-body]
+  (let [old-entry (model/get-by-key entry-key)
+        json-as-map (json/read-str (slurp request-body) :key-fn clojure.core/keyword)]
+    (if (is-owned old-entry)
+      (response {:critique  (dissoc (model/update old-entry (assoc (json-as-map :critique) :key entry-key)) :kind)})
+      not-auth-response)))
+
+
+
+(defroutes auth-artwork-routes
+  (context "/critiques"
+           request
+           (friend/wrap-authorize (routes
+                                   (DELETE "/:entry-key" [entry-key] (del-entry entry-key))
+                                   (GET "/" {params :params} (get-all params))
+                                   (POST "/" {request-body :body} (post request-body))
+                                   (PUT "/:entry-key" {params :params request-body :body} (put (params :entry-key) request-body))
+                                   (GET "/:entry-key" [entry-key] (get-entry entry-key)))
+                                  #{:user})))
