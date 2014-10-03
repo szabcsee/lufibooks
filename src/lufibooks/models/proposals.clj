@@ -22,7 +22,7 @@
   (if (coll? c) (clojure.string/join ", " c) c))
 
 (defn- to-desc [response]
-   {:short-desc (:review-content response)
+   {:shortDesc (:review-content response)
     :title (-> response :item-atributes :title)
     :author (concat-if-needed (-> response :item-atributes :author))
     :manufacturer (-> response :item-atributes :manufacturer)
