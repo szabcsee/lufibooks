@@ -19,32 +19,34 @@
   [created-at]
   [updated-at])
 
-(def client-can-edit [:allInStock])
-
 
 (defn get-by-key [entry-key]
   (let [entry (utils/get-by-key :books entry-key)]
-    (assoc entry :description (desc/get-by-key (:descKey entry)))))
+    (desc/add-desc entry)))
 
 (defn del-entry [old-entry]
    (let [entry-key (:key old-entry)]
      (delete-by-key entry-key)
      old-entry))
 
+(defn borrow [entry num-borrowed]
+  (let [all-in-stock (:allInStock entry)]
+    (assoc entry :numBorrowed num-borrowed :numAvail (- all-in-stock num-borrowed))))
+
 (defn persist [json-as-map]
   (let [proposals-key (:proposalsKey json-as-map)
         proposal (proposals/get-by-key proposals-key)
         new-entry
-    (assoc (save (books)
-          (merge (select-keys json-as-map client-can-edit) (select-keys proposal [:descKey])))
-      :description (desc/get-by-key (:descKey proposal)))]
+    (desc/add-desc (save (books)
+          (merge (borrow (select-keys json-as-map [:allInStock]) 0) (select-keys proposal [:descKey]))))]
     (proposals/del-entry proposal)
     new-entry))
 
 (defn update [old-entry json-as-map]
-    (save (books)
+  (let [num-borrowed (:numBorrowed json-as-map)]
+    (desc/add-desc (save (books)
           (merge old-entry
-                 (select-keys json-as-map client-can-edit))))
+                 (borrow old-entry num-borrowed))))))
 
 
 (defn get-all [params] (vals (desc/merge-result

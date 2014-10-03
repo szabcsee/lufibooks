@@ -38,3 +38,4 @@
               parent-map
               (select-keys child-map (keys parent-map) ))))
 
+(defn add-desc [entry] (assoc entry :description (get-by-key (:descKey entry))))

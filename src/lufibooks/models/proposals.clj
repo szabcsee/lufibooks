@@ -34,7 +34,7 @@
 
 (defn get-by-key [entry-key]
   (let [entry (utils/get-by-key :proposals entry-key)]
-    (assoc entry :description (desc/get-by-key (:descKey entry)))))
+    (desc/add-desc entry)))
 
 (defn del-entry [old-entry]
    (let [entry-key (:key old-entry)]
@@ -46,7 +46,7 @@
         resp (get-book-data-by-isbn isbn)
         desc (to-desc (-> resp :items first))
         saved-desc (desc/persist (assoc desc :isbn isbn))]
-    (assoc (save (proposals) {:descKey (:key saved-desc)}) :description saved-desc)))
+    (desc/add-desc (save (proposals) {:descKey (:key saved-desc)}))))
 
 
 (defn update [old-entry json-as-map]
