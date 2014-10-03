@@ -36,9 +36,12 @@
 (defn persist [json-as-map]
   (let [proposals-key (:proposalsKey json-as-map)
         proposal (proposals/get-by-key proposals-key)
-        new-entry
-    (desc/add-desc (save (books)
-          (merge (borrow (select-keys json-as-map [:allInStock]) 0) (select-keys proposal [:descKey]))))]
+        all-in-stock (:allInStock json-as-map)
+        new-entry (desc/add-desc (save (books)
+                                       (merge {:allInStock all-in-stock
+                                               :descKey (:descKey proposal)
+                                               :numAvail all-in-stock
+                                               :numBorrowed 0})))]
     (proposals/del-entry proposal)
     new-entry))
 
