@@ -9,17 +9,17 @@
 					<div class="panel panel-default proposals-panel">
   						<div class="panel-heading heading-proposals">Proposals</div>
 					    <div class="panel-body">
-							<div ng-repeat="proposal in proposals | orderBy: 'created-at'" class="list-group lsy-group">
-							  <li class="list-group-item">
-							  	<a class="lsy-btn" ng-click="VoteUp($event, proposal.key)">Vote me up!</a>
+							<div class="list-group lsy-group">
+							  <li ng-repeat="proposal in proposals | orderBy: 'created-at'" class="list-group-item">
+							  	<a class="lsy-btn" ng-click="VoteUp($event, proposal.key, proposal.vote)">Vote me up!</a>
 							  	<div class="media">
 								  <a class="pull-left" href="#">
 								    <img class="media-object" ng-src="{{proposal.description.imageUrl}}" alt="..." width="60">
 								  </a>
-								  <h4 class="media-heading">{{proposal.description.title}}</h4>
+								  <a href="#/proposals/{{proposal.key}}" <h4 class="media-heading">{{proposal.description.title}}</h4></a>
+								  <br/>
 								  <span class="label label-primary">voted by {{proposal.vote}} people</span>
-								  <div class="media-body">
-								    {{proposal.description.shortDesc}}
+								  <div class="media-body" bind-html-unsafe="proposal.description.shortDesc | limitTo: 200">
 
 								  </div>
 								</div>
