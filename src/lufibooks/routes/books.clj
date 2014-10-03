@@ -7,12 +7,12 @@
   (:use [ring.middleware.json :only [wrap-json-response wrap-json-body]]
      [ring.util.response :only [response]]))
 
-;(defn type-safe-search [params]
-;  (merge params {:numAvail ((:numAvail params))
-;  )
+(defn type-safe-search [params]
+  (if (contains? params ::numAvail) (merge params {:numAvail (Integer/parseInt (:numAvail params))})
+    params))
 
 (defn- get-all [params]
-  (response  {:book (map #(dissoc % :kind) (model/get-all params))}))
+  (response  {:book (map #(dissoc % :kind) (model/get-all (type-safe-search params)))}))
 
 (defn- del-entry [entry-key]
   (let [old-entry (model/get-by-key entry-key)]
