@@ -156,12 +156,14 @@ footer p {
 	text-align: center;
 	padding: 20px 0;
 }
-.lsy-group.list-group a.list-group-item.active {
+.lsy-group.list-group a.list-group-item.active,
+.list-group.lsy-group a.list-group-item:hover {
 	background: #022053;
 	border: 1px solid #022053;
 	color: #FFFFFF;
 }
-.lsy-group.list-group a.list-group-item.active span.badge {
+.lsy-group.list-group a.list-group-item.active span.badge,
+.list-group.lsy-group a.list-group-item:hover span.badge {
 	background: #ffb300;
 	color: #022053;
 }
@@ -184,4 +186,24 @@ footer p {
 .lsy-propose-button {
 	background: #ffb300;
 	color: #022053;
+}
+.book-preview .panel-body {
+	min-height: 460px;
+}
+.admin-section {
+	background: #9b9b9b;
+	border-radius: 5px;
+	padding: 15px;
+}
+.admin-section .btn {
+	float: left;
+	margin-left: 10px;
+}
+.admin-section .input-group {
+	float: left;
+	width: 120px;
+}
+.book-preview h3,
+.proposal-preview h3 {
+	font-size: 21px;
 }

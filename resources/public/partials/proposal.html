@@ -1,18 +1,24 @@
 		<div class="container">
 			<div class="row">
 			<div class="col-md-6 col-md-offset-3">
-					<div class="panel panel-default">
-  						<div class="panel-heading heading-proposals">Your successful proposal</div>
+					<div class="panel panel-default proposal-preview">
+  						<div class="panel-heading heading-proposals">Recommended book</div>
 					    <div class="panel-body">
-					    	<h2>Thank you for your proposal!</h2>
-					    	<hr/>
 							<div class="thumbnail">
 						      <img ng-src="{{proposal.description.imageUrl}}" alt="..." width="500">
 						      <div class="caption">
 						        <h3>{{proposal.description.author}} : {{proposal.description.title}} </h3>
-						        <p>{{proposal.description.shortDesc}}
-								</p>
+						        <p bind-html-unsafe="proposal.description.shortDesc"></p>
 						        <div class="clear"></div>
+						        <div class="admin-section">
+						        	<p>Purchase this book and add it to the library.</p>
+						        	<div class="input-group">
+									  <input type="text" class="form-control" ng-model="quantity">
+									  <span class="input-group-addon">pieces</span>
+									</div>
+									<button class="btn btn-default btn-warning" ng-click="addToStock($event, proposal.key, quantity)" type="button">Add to stock</button>
+									<div class="clear"></div>
+						        </div>
 						      </div>
 						    </div>
 						</div>
