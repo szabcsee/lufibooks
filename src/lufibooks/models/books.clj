@@ -56,3 +56,9 @@
                         (apply find-by-kind
                               (cons :books (utils/query-params-to-filter params)))
                          (desc/get-all))))
+
+(defn get-borrowed [params] (vals (desc/merge-result
+                        (find-by-kind :books :filters [:> :numBorrowed 0]) (desc/get-all))))
+
+(defn get-available [params] (vals (desc/merge-result
+                        (find-by-kind :books :filters [:> :numAvail 0]) (desc/get-all))))

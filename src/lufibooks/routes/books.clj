@@ -8,11 +8,14 @@
      [ring.util.response :only [response]]))
 
 (defn type-safe-search [params]
-  (if (contains? params ::numAvail) (merge params {:numAvail (Integer/parseInt (:numAvail params))})
+  (if (contains? params :numAvail) (merge params {:numAvail (Integer/parseInt (:numAvail params))})
     params))
 
 (defn- get-all [params]
-  (response  {:book (map #(dissoc % :kind) (model/get-all (type-safe-search params)))}))
+    (case (:state params)
+      "borrowed" (response  {:book (map #(dissoc % :kind) (model/get-borrowed (type-safe-search params)))})
+      "available" (response  {:book (map #(dissoc % :kind) (model/get-available (type-safe-search params)))})
+        (response  {:book (map #(dissoc % :kind) (model/get-all (type-safe-search params)))})))
 
 (defn- del-entry [entry-key]
   (let [old-entry (model/get-by-key entry-key)]
