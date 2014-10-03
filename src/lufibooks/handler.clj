@@ -21,9 +21,9 @@
 (defn init []
   (do
     (set-ds! (new-datastore :implementation :memory))
-    (doseq [isbn ["1934356867" "0321721330" "0321944275" "1934356867" "1937785645" "1449366171"]]
+    (doseq [isbn ["0321721330" "0321944275" "1934356867" "1937785645" "1449366171" "1593274874" "1491949309" "193435631X"]]
       (proposals-model/persist {:isbn isbn}))
-    (doseq [proposals-key (map :key (take 2 (proposals-model/get-all  nil)))]
+    (doseq [proposals-key (map :key (take 5 (proposals-model/get-all  nil)))]
       (books-model/persist {:proposalsKey proposals-key :allInStock 1}))
     (println "lufibooks is starting")))
 

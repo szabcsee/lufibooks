@@ -10,17 +10,17 @@
   						<div class="panel-heading heading-newbooks">New Books</div>
 					    <div class="panel-body">
 							<div class="list-group lsy-group">
-							  <a ng-repeat="book in books | orderBy: 'description.created-at'" href="#/books/{{book.key}}" ng-click="transitionToBook($event, book.key)" class="list-group-item">{{book.description.title}}</a>
+							  <a ng-repeat="book in books | orderBy: 'description.created-at'" href="#/books/{{book.key}}" ng-click="transitionToBook($event, book.key)" class="list-group-item">{{book.description.title | limitTo: 70}}</a>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="panel panel-default">
-  						<div class="panel-heading heading-proposals">Latest proposals</div>
+  						<div class="panel-heading heading-proposals">Latest recommendations</div>
 					    <div class="panel-body">
 							<div class="list-group lsy-group">
-							  <a ng-repeat="proposal in proposals | orderBy: 'description.created-at'" href="#" class="list-group-item"><span class="badge">{{proposal.vote}}</span>{{proposal.description.title}}</a>
+							  <a ng-repeat="proposal in proposals | orderBy: 'description.created-at'" href="#/proposals/{{proposal.key}}" class="list-group-item"><span class="badge">{{proposal.vote}}</span>{{proposal.description.title | limitTo: 70}}</a>
 							</div>
 						</div>
 					</div>

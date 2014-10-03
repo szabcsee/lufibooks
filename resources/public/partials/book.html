@@ -7,12 +7,11 @@
 			<div class="row">
 				<div class="col-md-6">
 					<ul class="nav nav-pills nav-justified lsy-pills">
-					  <li class="active"><a href="#">Available</a></li>
-					  <li><a href="#">Borrowed</a></li>
-					  <li><a href="#">Ending Soon</a></li>
+					  <li><a href="" ng-click="availableBooks($event)">Available</a></li>
+					  <li><a href="" ng-click="borrowedBooks($event)">Borrowed</a></li>
+					  <li><a href="" ng-click="totalBooks($event)">Total</a></li>
 					</ul>
 				</div>
-
 			</div>
 			<div class="row">
 				<div class="col-md-6">
@@ -20,7 +19,7 @@
   						<div class="panel-heading heading-newbooks">Books</div>
 					    <div class="panel-body">
 							<div class="list-group lsy-group">
-							  <a ng-repeat="book in books" href="#/books/{{book.key}}"  class="list-group-item">{{book.description.title}}</a>
+							  <a ng-repeat="book in books" href="#/books/{{book.key}}"  class="list-group-item">{{book.description.title | limitTo: 70}}</a>
 							</div>
 						</div>
 					</div>
@@ -34,9 +33,9 @@
 						      <div class="caption">
 						        <h3>{{thebook.description.title}}</h3>
 						        <h4>Author: {{thebook.description.author}}</h4>
-						        <span class="label label-warning">in stock: {{thebook.allInStock}}</span>
+						        <span class="label label-warning">available: {{thebook.allInStock}}</span>
 						        <p bind-html-unsafe="thebook.description.shortDesc"></p>
-						        <p><a href="#" class="lsy-btn rent-a-btn" role="button">Borrow this book</a></p>
+						        <p><a href="#" class="lsy-btn rent-a-btn" role="button" ng-click="borrowThisBook($event, thebook.key)">Borrow this book</a></p>
 						        <div class="clear"></div>
 						      </div>
 						    </div>

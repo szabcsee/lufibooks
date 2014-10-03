@@ -4,11 +4,10 @@
 					<div class="white-wrapper">
 						<div class="media">
 						  <a class="pull-left" href="#">
-						    <img class="media-object" src="http://ecx.images-amazon.com/images/I/91dwVV3kLPL._SL1500_.jpg" width="200px" alt="...">
+						    <img class="media-object" ng-src={{thebook.description.imageUrl}} width="200px" alt="...">
 						  </a>
 						  <div class="media-body">
-						    <h1>You borrowed Ember.js!</h1>
-					  		<p>Deadline: 2014.11.01</p>
+						    <h1>{{thebook.description.title}}</h1>
 					  		<hr/>
 					  		<p>You can pick up your book from the second floor. Call this number or send an email to here and there.</p>
 						  </div>

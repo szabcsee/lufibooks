@@ -17,7 +17,7 @@ var lufibooksApp = angular.module('lufibooks', ['ngRoute']).config(function($rou
 		}).when('/login', {
 			templateUrl: 'partials/login.html',
 			controller: 'LoginCtrl'
-		}).when('/borrowed:books_id', {
+		}).when('/borrowed/:book_id', {
 			templateUrl: 'partials/borrowed.html',
 			controller: 'BorrowedCtrl'
 		}).otherwise({
@@ -53,16 +53,63 @@ lufibooksApp.controller('BookCtrl', function($scope, $http, $routeParams, $locat
 	$http.get('/books/' + $routeParams.book_id).success(function(data) {
 		$scope.thebook = data.book;
 	});
+	$scope.borrowThisBook = function(clickEvent, key) {
+		var bookData = {"book": {"numBorrowed": 1, "key": key} };
+		$http.put('/books/' + key, bookData ).success(function(response){
+			$location.url('/borrowed/' + response.book.key);
+		});
+	};
+	$scope.borrowedBooks = function(clickEvent) {
+		$http.get('/books?state=borrowed').success(function(books) {
+			$scope.books = books.book;
+			$location.url('/books');
+		});
+	};
+	$scope.availableBooks = function(clickEvent) {
+		$http.get('/books?state=available').success(function(books) {
+			$scope.books = books.book;
+			$location.url('/books');
+		});
+	};
+	$scope.totalBooks = function(clickEvent) {
+		$http.get('/books').success(function(books) {
+			$scope.books = books.book;
+			$location.url('/books');
+		});
+	};
+});
+lufibooksApp.controller('BorrowedCtrl', function($scope, $http, $routeParams, $location) {
+	$http.get('/books/' + $routeParams.book_id).success(function(data) {
+		$scope.thebook = data.book;
+	});
 });
 lufibooksApp.controller('BooksCtrl', function($scope, $http, $location) {
-	$http.get('/books').success(function(data) {
+	$http.get('/books?numAvail=1').success(function(data) {
 		$scope.books = data.book;
 	});
+	$scope.borrowedBooks = function(clickEvent) {
+		$http.get('/books?state=borrowed').success(function(books) {
+			$scope.books = books.book;
+			$location.url('/books');
+		});
+	};
+	$scope.availableBooks = function(clickEvent) {
+		$http.get('/books?state=available').success(function(books) {
+			$scope.books = books.book;
+			$location.url('/books');
+		});
+	};
+	$scope.totalBooks = function(clickEvent) {
+		$http.get('/books').success(function(books) {
+			$scope.books = books.book;
+			$location.url('/books');
+		});
+	};
 });
 
 
 lufibooksApp.controller('MainCtrl', function($scope, $http, $location) {
-	$http.get('/books').success(function(books) {
+	$http.get('/books?state=available').success(function(books) {
 		$scope.books = books.book;
 	});
 	$http.get('/proposals').success(function(proposals) {
@@ -78,7 +125,9 @@ lufibooksApp.controller('NewProposalCtrl', function($scope, $http, $routeParams,
 		$scope.proposal = data.proposal;
 	});
 	$scope.addToStock = function(clickEvent, key, stock) {
-		var stockData = {"book": {"proposalsKey" : key, "allInStock": stock}};
+		var stockNumber = parseInt(stock);
+		console.log(stockNumber);
+		var stockData = {"book": {"proposalsKey" : key, "allInStock": stockNumber}};
 		$http.post('/books', stockData ).success(function(response){
 			$location.url('/books/' + response.book.key);
 		});
@@ -105,11 +154,8 @@ lufibooksApp.directive('bindHtmlUnsafe', function( $compile ) {
     };
 });
 
-function LoginCtrl($scope, $http) {
+lufibooksApp.controller('LoginCtrl', function($scope, $http, $location) {
 
-}
+});
 
-function BorrowedCtrl($scope, $http) {
-
-}
 
