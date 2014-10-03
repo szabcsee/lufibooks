@@ -6,6 +6,7 @@
 
 (defentity :descriptions
   ; from client
+  [isbn]
   [shortDesc]
   [title]
   [author]

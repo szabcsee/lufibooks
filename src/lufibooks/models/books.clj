@@ -22,8 +22,9 @@
 (def client-can-edit [:allInStock])
 
 
-(def get-by-key
-  (partial utils/get-by-key :books))
+(defn get-by-key [entry-key]
+  (let [entry (utils/get-by-key :books entry-key)]
+    (assoc entry :description (desc/get-by-key (:descKey entry)))))
 
 (defn del-entry [old-entry]
    (let [entry-key (:key old-entry)]
@@ -31,8 +32,8 @@
      old-entry))
 
 (defn persist [json-as-map]
-  (let [isbn (:isbn json-as-map)
-        proposal (proposals/get-by-isbn isbn)
+  (let [proposals-key (:proposalsKey json-as-map)
+        proposal (proposals/get-by-key proposals-key)
         new-entry
     (assoc (save (books)
           (merge (select-keys json-as-map client-can-edit) (select-keys proposal [:descKey])))
